@@ -15,22 +15,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import com.example.espnathletes.AthleteReceiver.Receiver;
 
 public class MainActivity extends ListActivity implements Receiver {
 
 	private Intent service;
-	//private ListView athleteList;
 	private AthleteReceiver mReceiver;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
-        //athleteList = (ListView) findViewById(R.id.athleteList);
         
         mReceiver = new AthleteReceiver(new Handler());
         mReceiver.setReceiver(this);
@@ -69,16 +65,15 @@ public class MainActivity extends ListActivity implements Receiver {
 												.getJSONObject(0)
 												.getJSONArray("athletes");
 			
-			List<String> names = new ArrayList<String>();
+			List<String> athletes = new ArrayList<String>();
 			
 			for(int i = 0; i < athletesArray.length(); i++) {
 				JSONObject athlete = athletesArray.getJSONObject(i);
-				String name = athlete.getString("displayName");
-				names.add(name);
+				
+				athletes.add(athlete.toString());
 				
 			}
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);
-			//athleteList.setAdapter(adapter);
+			AthleteAdapter adapter = new AthleteAdapter(this, android.R.layout.simple_list_item_1, athletes);
 			setListAdapter(adapter);
 			
 		} catch (JSONException e) {
